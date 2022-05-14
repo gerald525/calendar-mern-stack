@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 const RegisterScreen = () => {
   return (
@@ -7,34 +7,50 @@ const RegisterScreen = () => {
         <div className="card__body">
           <h1 className="card__title">Create account</h1>
           <form className="form">
-            <input
-              className="form__input"
-              type="text"
-              placeholder="Name"
-              name="name"
-              id="name"
-            />
-            <input
-              className="form__input"
-              type="email"
-              placeholder="Email"
-              name="email"
-              id="email"
-            />
-            <input
-              className="form__input"
-              type="password"
-              placeholder="Password"
-              name="password"
-              id="password"
-            />
-            <input
-              className="form__input"
-              type="password"
-              placeholder="Password confirmation"
-              name="password2"
-              id="password2"
-            />
+            <div className="form__field">
+              <label htmlFor="name" className="form__label">
+                Name
+              </label>
+              <input
+                className="form__input"
+                type="text"
+                name="name"
+                id="name"
+              />
+            </div>
+            <div className="form__field">
+              <label htmlFor="email" className="form__label">
+                Email
+              </label>
+              <input
+                className="form__input"
+                type="email"
+                name="email"
+                id="email"
+              />
+            </div>
+            <div className="form__field">
+              <label htmlFor="password" className="form__label">
+                Password
+              </label>
+              <input
+                className="form__input"
+                type="password"
+                name="password"
+                id="password"
+              />
+            </div>
+            <div className="form__field">
+              <label htmlFor="password2" className="form__label">
+                Password confirmation
+              </label>
+              <input
+                className="form__input"
+                type="password"
+                name="password2"
+                id="password2"
+              />
+            </div>
             <button className="btn btn-primary" type="submit">
               Register
             </button>
@@ -47,7 +63,10 @@ const RegisterScreen = () => {
           <p className="card__description">
             To keep connected, please login with your personal information
           </p>
-          <Link className="btn btn-primary btn-primary--outline" to="/auth/login">
+          <Link
+            className="btn btn-primary btn-primary--outline"
+            to="/auth/login"
+          >
             Login
           </Link>
         </div>

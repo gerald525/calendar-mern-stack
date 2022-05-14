@@ -8,11 +8,11 @@
 }
 
 .card {
-  border-radius: 2rem;
-  -webkit-border-radius: 2rem;
-  -moz-border-radius: 2rem;
-  -ms-border-radius: 2rem;
-  -o-border-radius: 2rem;
+  border-radius: 1rem;
+  -webkit-border-radius: 1rem;
+  -moz-border-radius: 1rem;
+  -ms-border-radius: 1rem;
+  -o-border-radius: 1rem;
   box-shadow: 0 6px 10px rgba(0, 0, 0, .25);
   display: flex;
   flex-direction: column;
@@ -88,8 +88,19 @@
   justify-content: center;
 }
 
-.form__input {
-  background-color: #f2f2f2;
+.form__field{
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.form__label{
+  display: block;
+  text-align: left;
+  margin-bottom: 0.25rem;
+}
+
+.form__input, .form__text-area {
+  background-color: var(--color-light-gray);
   border: 0;
   border-radius: .25rem;
   -webkit-border-radius: .25rem;
@@ -97,10 +108,10 @@
   -ms-border-radius: .25rem;
   -o-border-radius: .25rem;
   color: var(--color-dark-gray);
-  margin-bottom: 1rem;
   outline-color: var(--color-dark-gray);
   padding: .5rem 1rem;
   width: 100%;
+  resize: vertical;
 }
 
 @media (min-width: 768px) {
