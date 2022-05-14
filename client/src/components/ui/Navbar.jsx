@@ -1,6 +1,6 @@
 import LogoutIcon from "./icons/LogoutIcon";
 import UserIcon from "./icons/UserIcon";
-import "./navbar.css"
+import "./ui.css"
 
 const Navbar = () => {
   return (

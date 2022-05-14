@@ -1,31 +1,45 @@
 import Modal from "react-modal";
 import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { uiCloseModal } from "../../actions/ui";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  eventAddNew,
+  eventClearActive,
+  eventUpdate,
+} from "../../actions/event";
 
 Modal.setAppElement("#root");
 
 const nowInitial = moment().minutes(0).seconds(0).add(1, "hour");
-const nowFinal = nowInitial.clone().add(1, "hour");
+const nowEnd = nowInitial.clone().add(1, "hour");
+
+const initEvent = {
+  title: "",
+  notes: "",
+  start: nowInitial.toDate(),
+  end: nowEnd.toDate(),
+};
 
 const CalendarModal = () => {
   const dispatch = useDispatch();
-  const { modalOpen } = useSelector((state) => state.ui);
 
-  const [startDate, setStartDate] = useState(nowInitial.toDate());
-  const [finalDate, setFinalDate] = useState(nowFinal.toDate());
+  const { ui, calendar } = useSelector((state) => state);
+  const { modalOpen } = ui;
+  const { activeEvent } = calendar;
 
-  const [formValues, setFormValues] = useState({
-    title: "",
-    notes: "",
-    start: nowInitial.toDate(),
-    end: nowFinal.toDate(),
-  });
-
+  const [formValues, setFormValues] = useState(initEvent);
   const { notes, title, start, end } = formValues;
+
+  useEffect(() => {
+    if (activeEvent) {
+      setFormValues(activeEvent);
+    } else {
+      setFormValues(initEvent);
+    }
+  }, [activeEvent]);
 
   const handleInputChange = ({ target }) => {
     setFormValues({
@@ -35,37 +49,57 @@ const CalendarModal = () => {
   };
 
   const closeModal = () => {
-    if (modalOpen) dispatch(uiCloseModal());
+    if (modalOpen) {
+      setTimeout(() => {
+        dispatch(eventClearActive());
+        setFormValues(initEvent);
+      }, 200);
+      dispatch(uiCloseModal());
+    }
   };
 
   const handleStartDateChange = (e) => {
-    setStartDate(e);
     setFormValues({
       ...formValues,
       start: e,
     });
   };
 
-  const handleFinalDateChange = (e) => {
-    setFinalDate(e);
+  const handleEndDateChange = (e) => {
     setFormValues({
       ...formValues,
-      start: e,
+      end: e,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const momentStart = moment(start);
-    const momentEnd = moment(end);
-
-    if (momentStart.isSameOrAfter(momentEnd)) {
-      Swal.fire("Error", "Final date must be after initial date", "error");
+    if (moment(start).isSameOrAfter(moment(end))) {
+      Swal.fire("Error", "End date must be after start date", "error");
+      return;
     }
 
     if (title.trim().length < 2) {
       Swal.fire("Error", "Title length must be at least 2", "error");
+      return;
+    }
+
+    if (activeEvent) {
+      // Update
+      dispatch(eventUpdate(formValues));
+    } else {
+      // Create new
+      dispatch(
+        eventAddNew({
+          ...formValues,
+          id: new Date().getTime(),
+          user: {
+            _id: "123",
+            name: "Juan",
+          },
+        })
+      );
     }
 
     closeModal();
@@ -80,23 +114,25 @@ const CalendarModal = () => {
       className="modal"
       overlayClassName="modal__background"
     >
-      <h1 className="modal__title">New event</h1>
+      <h1 className="modal__title">
+        {activeEvent ? "Edit event" : "New event"}
+      </h1>
       <hr />
       <form className="form" onSubmit={handleSubmit}>
         <div className="form__field">
           <label className="form__label">Start date</label>
           <DateTimePicker
             onChange={handleStartDateChange}
-            value={startDate}
+            value={start}
             className="form__input"
           />
         </div>
         <div className="form__field">
-          <label className="form__label">Final date</label>
+          <label className="form__label">End date</label>
           <DateTimePicker
-            onChange={handleFinalDateChange}
-            value={finalDate}
-            minDate={startDate}
+            onChange={handleEndDateChange}
+            value={end}
+            minDate={start}
             className="form__input"
           />
         </div>

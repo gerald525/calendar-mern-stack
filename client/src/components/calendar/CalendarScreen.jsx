@@ -8,54 +8,38 @@ import CalendarEvent from "./CalendarEvent";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./calendar.css";
 import CalendarModal from "./CalendarModal";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { uiOpenModal } from "../../actions/ui";
+import { eventClearActive, eventSetActive } from "../../actions/event";
+import AddNewBtn from "../ui/AddNewBtn";
+import DeleteBtn from "../ui/DeleteBtn";
 
 const localizer = momentLocalizer(moment);
-const events = [
-  {
-    title: "Happy birthday",
-    start: moment().toDate(),
-    end: moment().add(2, "hours").toDate(),
-    notes: "Buy cake",
-    user: {
-      _id: "123",
-      name: "Juan",
-    },
-  },
-];
 
 const CalendarScreen = () => {
   const dispatch = useDispatch();
+  const { events, activeEvent } = useSelector((state) => state.calendar);
   const [lastView, setLastView] = useState(
     localStorage.getItem("lastView") || "month"
   );
 
   const onDoubleClick = (e) => {
-    dispatch(uiOpenModal())
+    dispatch(uiOpenModal());
   };
 
   const onSelect = (e) => {
-    console.log(e);
+    dispatch(eventSetActive(e));
   };
 
   const onViewChange = (e) => {
     setLastView(e);
     localStorage.setItem("lastView", e);
   };
-
-  const eventStyleGetter = (event, start, end, isSelected) => {
-    const style = {
-      backgroundColor: "darkcyan",
-      opacity: 0.9,
-      color: "white",
-    };
-
-    return {
-      style,
-    };
+  const onSelectSlot = (e) => {
+    activeEvent && dispatch(eventClearActive());
   };
 
+  // TODO: Select between slots in calendar screen to add event according to selected dates
   return (
     <div className="calendar">
       <Navbar />
@@ -65,14 +49,18 @@ const CalendarScreen = () => {
           events={events}
           startAccessor="start"
           endAccessor="end"
-          eventPropGetter={eventStyleGetter}
+          // eventPropGetter={eventPropGetter}
           onDoubleClickEvent={onDoubleClick}
           onSelectEvent={onSelect}
           onView={onViewChange}
+          onSelectSlot={onSelectSlot}
+          selectable={true}
           view={lastView}
           components={{ event: CalendarEvent }}
         />
       </div>
+      {activeEvent && <DeleteBtn />}
+      <AddNewBtn />
       <CalendarModal />
     </div>
   );
