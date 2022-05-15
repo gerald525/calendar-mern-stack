@@ -1,5 +1,5 @@
 const bcryptjs = require("bcryptjs");
-const User = require("../models/user");
+const User = require("../models/User");
 const generateJWT = require("../helpers/jwt");
 
 const createUser = async (req, res) => {
@@ -25,7 +25,6 @@ const createUser = async (req, res) => {
 
     return res.status(201).json({
       ok: true,
-      msg: "User registered successfully",
       user,
       token
     });
@@ -65,7 +64,6 @@ const loginUser = async (req, res) => {
 
     return res.status(200).json({
       ok: true,
-      msg: "User logged successfully",
       user,
       token
     });
