@@ -1,12 +1,16 @@
 const express = require("express");
-const dbConnection = require("./database/config");
 require("dotenv").config();
+const dbConnection = require("./database/config");
+const cors = require("cors");
 
 // Server
 const app = express();
 
 // Database
 dbConnection();
+
+// Cors
+app.use(cors())
 
 // Public path
 app.use(express.static("public"));
@@ -19,6 +23,6 @@ app.use("/api/auth", require("./routes/auth"))
 
 // Listening PORT 
 const port = process.env.PORT || 5000;
-app.listen(port, () => { 
+app.listen(port, () => {
   console.log(`SERVER LISTENING ON PORT ${port}`)
 })
