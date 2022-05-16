@@ -1,4 +1,5 @@
 const Event = require("../models/Event");
+const User = require("../models/User");
 
 const eventExistsById = async (req, res, next) => {
   const { id } = req.params;
@@ -37,13 +38,16 @@ const isEventOwner = async (req, res, next) => {
 
 const emailExists = async (req, res, next) => {
   const { email } = req.body;
-  const userExists = await Event.findOne({ email });
+  const userExists = await User.findOne({ email });
+
   if (userExists) {
     return res.status(400).json({
       ok: false,
       msg: "Email already exists",
     });
   }
+
+  next();
 };
 
 module.exports = {
