@@ -1,12 +1,30 @@
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { startRegister } from "../../actions/auth";
+import useForm from "../../hooks/useForm";
 
 const RegisterScreen = () => {
+  const dispatch = useDispatch();
+  const [formValues, handleInputChange] = useForm({
+    name: "juan2",
+    email: "juan2@test.com",
+    password: "Aabc123.",
+    password2: "Aabc123.",
+  });
+  const { name, email, password, password2 } = formValues;
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    // TODO: Validations
+    dispatch(startRegister(name, email, password));
+  };
+
   return (
     <section className="card card--inverse">
       <div className="card__row card__row--left">
         <div className="card__body">
           <h1 className="card__title">Create account</h1>
-          <form className="form">
+          <form className="form" onSubmit={handleRegister}>
             <div className="form__field">
               <label htmlFor="name" className="form__label">
                 Name
@@ -16,6 +34,8 @@ const RegisterScreen = () => {
                 type="text"
                 name="name"
                 id="name"
+                value={name}
+                onChange={handleInputChange}
               />
             </div>
             <div className="form__field">
@@ -27,6 +47,8 @@ const RegisterScreen = () => {
                 type="email"
                 name="email"
                 id="email"
+                value={email}
+                onChange={handleInputChange}
               />
             </div>
             <div className="form__field">
@@ -38,6 +60,8 @@ const RegisterScreen = () => {
                 type="password"
                 name="password"
                 id="password"
+                value={password}
+                onChange={handleInputChange}
               />
             </div>
             <div className="form__field">
@@ -49,6 +73,8 @@ const RegisterScreen = () => {
                 type="password"
                 name="password2"
                 id="password2"
+                value={password2}
+                onChange={handleInputChange}
               />
             </div>
             <button className="btn btn-primary" type="submit">
