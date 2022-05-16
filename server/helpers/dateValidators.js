@@ -13,6 +13,14 @@ const isDate = (value) => {
   }
 };
 
+const isDateAfter = (end, start) => {
+  if (moment(start).isSameOrAfter(moment(end))) {
+    return false;
+  }
+  return true;
+};
+
 module.exports = {
   isDate,
+  isDateAfter,
 };

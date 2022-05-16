@@ -14,7 +14,7 @@ const {
   eventExistsById,
   isEventOwner,
 } = require("../helpers/databaseValidators");
-const { isDate } = require("../helpers/isDate");
+const { isDate, isDateAfter } = require("../helpers/dateValidators");
 const validateFields = require("../middlewares/validateFields");
 const validateJWT = require("../middlewares/validateJwt");
 
@@ -35,6 +35,14 @@ router.post(
     check("start", "Invalid start date").custom(isDate),
     check("end", "End date is required").not().isEmpty(),
     check("end", "Invalid end date").custom(isDate),
+    check("end", "End date must be after start date").custom((end, { req }) =>
+      isDateAfter(end, req.body.start)
+    ),
+    check("notes", "Notes length must be max 128 characters")
+      .optional()
+      .isLength({
+        max: 128,
+      }),
     validateFields,
   ],
   createEvent
@@ -52,6 +60,11 @@ router.put(
     check("start", "Invalid start date").custom(isDate),
     check("end", "End date is required").not().isEmpty(),
     check("end", "Invalid end date").custom(isDate),
+    check("notes", "Notes length must be max 128 characters")
+      .optional()
+      .isLength({
+        max: 128,
+      }),
     validateFields,
     eventExistsById,
     isEventOwner,
