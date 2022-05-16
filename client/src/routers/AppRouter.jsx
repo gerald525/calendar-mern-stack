@@ -11,7 +11,7 @@ const AppRouter = () => {
         <Route
           path="/*"
           element={
-            <PublicRoute isAuth={true}>
+            <PublicRoute isAuth={false}>
               <AuthRouter />
             </PublicRoute>
           }
@@ -19,7 +19,7 @@ const AppRouter = () => {
         <Route
           path="/"
           element={
-            <PrivateRoute isAuth={true}>
+            <PrivateRoute isAuth={false}>
               <CalendarScreen />
             </PrivateRoute>
           }

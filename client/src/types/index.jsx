@@ -1,4 +1,12 @@
 const types = {
+  authChecking: "[Auth] Checking login",
+  authCheckingFinish: "[Auth] Finish checking",
+  authStartLogin: "[Auth] Start login",
+  authLogin: "[Auth] Login",
+  authStartRegister: "[Auth] Start register",
+  authRegister: "[Auth] Register",
+  authLogout: "[Auth] Logout",
+
   uiOpenModal: "[UI] Open modal",
   uiCloseModal: "[UI] Close modal",
 
