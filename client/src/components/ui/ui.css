@@ -95,6 +95,7 @@
 .navbar__text{
   font-weight: bold;
   margin: 0 0 0 1rem;
+  text-transform: capitalize;
 }
 
 .navbar__link{
