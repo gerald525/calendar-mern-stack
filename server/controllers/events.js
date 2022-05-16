@@ -18,10 +18,15 @@ const getEvents = async (req, res) => {
 };
 
 const createEvent = async (req, res) => {
-  const { title, start, end } = req.body;
+  const { title, start, end, notes } = req.body;
 
-  const event = new Event(req.body);
-  event.user = req.id;
+  const event = new Event({
+    title,
+    start,
+    end,
+    notes,
+    user: req.id
+  });
 
   try {
     await event.save();
@@ -41,26 +46,10 @@ const createEvent = async (req, res) => {
 
 const updateEvent = async (req, res) => {
   const { id } = req.params;
-  const userId = req.id;
   const { title, start, end, notes } = req.body;
+
   try {
-    const event = await Event.findById(id);
-
-    if (!event) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Event id does not exists",
-      });
-    }
-
-    if (event.user.toString() !== userId) {
-      return res.status(401).json({
-        ok: false,
-        msg: "Insufficient privileges",
-      });
-    }
-
-    const newEvent = await Event.findByIdAndUpdate(
+    const event = await Event.findByIdAndUpdate(
       id,
       {
         title,
@@ -71,7 +60,7 @@ const updateEvent = async (req, res) => {
       { new: true }
     );
 
-    return res.json({ ok: true, event: newEvent });
+    return res.json({ ok: true, event });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -83,25 +72,9 @@ const updateEvent = async (req, res) => {
 
 const deleteEvent = async (req, res) => {
   const { id } = req.params;
-  const userId = req.id;
+
   try {
-    const event = await Event.findById(id);
-
-    if (!event) {
-      return res.status(404).json({
-        ok: false,
-        msg: "Event id does not exists",
-      });
-    }
-
-    if (event.user.toString() !== userId) {
-      return res.status(401).json({
-        ok: false,
-        msg: "Insufficient privileges",
-      });
-    }
-
-    await Event.findByIdAndDelete(id)
+    const event = await Event.findByIdAndDelete(id)
 
     return res.json({ ok: true, event });
   } catch (error) {
