@@ -25,7 +25,7 @@ const createEvent = async (req, res) => {
     start,
     end,
     notes,
-    user: req.id
+    user: req.id,
   });
 
   try {
@@ -74,9 +74,12 @@ const deleteEvent = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const event = await Event.findByIdAndDelete(id)
+    const event = await Event.findByIdAndDelete(id);
 
-    return res.json({ ok: true, event });
+    return res.json({
+      ok: true,
+      event,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
