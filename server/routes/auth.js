@@ -14,8 +14,7 @@ router.post(
   "/register",
   [
     check("name", "Name is required").not().isEmpty(),
-    check("name", "Name must be between 1 to 32 characters.").isLength({
-      min: 1,
+    check("name", "Name length must be max 32 characters").isLength({
       max: 32,
     }),
     check("email", "Invalid email").isEmail(),

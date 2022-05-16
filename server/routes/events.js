@@ -10,7 +10,10 @@ const {
   updateEvent,
   deleteEvent,
 } = require("../controllers/events");
-const { eventExistsById, isEventOwner } = require("../helpers/databaseValidators");
+const {
+  eventExistsById,
+  isEventOwner,
+} = require("../helpers/databaseValidators");
 const { isDate } = require("../helpers/isDate");
 const validateFields = require("../middlewares/validateFields");
 const validateJWT = require("../middlewares/validateJwt");
@@ -25,6 +28,9 @@ router.post(
   "/",
   [
     check("title", "Title is required").not().isEmpty(),
+    check("title", "Title length must be max 32 characters").isLength({
+      max: 32,
+    }),
     check("start", "Start date is required").not().isEmpty(),
     check("start", "Invalid start date").custom(isDate),
     check("end", "End date is required").not().isEmpty(),
@@ -39,6 +45,9 @@ router.put(
   [
     check("id", "Invalid event ID.").isMongoId(),
     check("title", "Title is required").not().isEmpty(),
+    check("title", "Title length must be max 32 characters").isLength({
+      max: 32,
+    }),
     check("start", "Start date is required").not().isEmpty(),
     check("start", "Invalid start date").custom(isDate),
     check("end", "End date is required").not().isEmpty(),
