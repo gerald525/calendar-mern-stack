@@ -24,19 +24,26 @@ const RegisterScreen = () => {
 
   const isFormValid = () => {
     if (name.trim().length === 0) {
-      dispatch(setError("Name is required."));
+      dispatch(setError("Name is required"));
+      return false;
+    } else if (name.trim().length > 32) {
+      dispatch(setError("Name length must be max 32 characters"));
       return false;
     } else if (!validator.isEmail(email)) {
-      dispatch(setError("Email is not valid."));
+      dispatch(setError("Email is not valid"));
       return false;
     } else if (
       !validator.isStrongPassword(password.toString()) ||
       password.length > 32
     ) {
-      dispatch(setError("Password should be between 8-32 characters and should include 1 number, 1 symbol, 1 lowercase and 1 uppercase."));
+      dispatch(
+        setError(
+          "Password should be between 8-32 characters and should include 1 number, 1 symbol, 1 lowercase and 1 uppercase"
+        )
+      );
       return false;
     } else if (password !== password2) {
-      dispatch(setError("Passwords should match."));
+      dispatch(setError("Passwords should match"));
       return false;
     }
     dispatch(removeError());

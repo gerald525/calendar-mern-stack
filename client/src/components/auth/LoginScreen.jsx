@@ -21,9 +21,11 @@ const LoginScreen = () => {
   };
 
   const isFormValid = () => {
-    console.log("Entering")
     if (!validator.isEmail(email)) {
-      dispatch(setError("Email is not valid."));
+      dispatch(setError("Email is not valid"));
+      return false;
+    } else if (password.trim().length === 0) {
+      dispatch(setError("Password is required"));
       return false;
     }
     dispatch(removeError());

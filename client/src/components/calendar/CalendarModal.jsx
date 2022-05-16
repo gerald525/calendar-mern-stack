@@ -1,15 +1,16 @@
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
-import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import { uiCloseModal } from "../../actions/ui";
+import validator from "validator";
+import { removeError, setError, uiCloseModal } from "../../actions/ui";
 import { useDispatch, useSelector } from "react-redux";
 import {
   eventAddNew,
   eventClearActive,
   eventUpdate,
 } from "../../actions/event";
+import Alert from "../ui/Alert";
 
 Modal.setAppElement("#root");
 
@@ -27,7 +28,7 @@ const CalendarModal = () => {
   const dispatch = useDispatch();
 
   const { ui, calendar } = useSelector((state) => state);
-  const { modalOpen } = ui;
+  const { modalOpen, msgError } = ui;
   const { activeEvent } = calendar;
 
   const [formValues, setFormValues] = useState(initEvent);
@@ -75,15 +76,7 @@ const CalendarModal = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (moment(start).isSameOrAfter(moment(end))) {
-      Swal.fire("Error", "End date must be after start date", "error");
-      return;
-    }
-
-    if (title.trim().length < 2) {
-      Swal.fire("Error", "Title length must be at least 2", "error");
-      return;
-    }
+    if (!isFormValid()) return;
 
     if (activeEvent) {
       // Update
@@ -105,6 +98,24 @@ const CalendarModal = () => {
     closeModal();
   };
 
+  const isFormValid = () => {
+    if (title.trim().length === 0) {
+      dispatch(setError("Title is required"));
+      return false;
+    } else if (title.trim().length > 32) {
+      dispatch(setError("Title length must be max 32 characters"));
+      return false;
+    } else if (moment(start).isSameOrAfter(moment(end))) {
+      dispatch(setError("End date must be after start date"));
+      return false;
+    } else if (notes && notes.trim().length > 128) {
+      dispatch(setError("Notes length must be max 128 characters"));
+      return false;
+    }
+    dispatch(removeError());
+    return true;
+  };
+
   return (
     <Modal
       isOpen={modalOpen}
@@ -119,6 +130,7 @@ const CalendarModal = () => {
       </h1>
       <hr />
       <form className="form" onSubmit={handleSubmit}>
+        {msgError && <Alert type="error" description={msgError} />}
         <div className="form__field">
           <label className="form__label">Start date</label>
           <DateTimePicker
