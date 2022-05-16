@@ -26,9 +26,8 @@ const createUser = async (req, res) => {
     return res.status(201).json({
       ok: true,
       user,
-      token
+      token,
     });
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -46,9 +45,9 @@ const loginUser = async (req, res) => {
 
     if (!user) {
       return res.status(400).json({
-        ok: false, msg: "User email does not exist"
-      }
-      );
+        ok: false,
+        msg: "User email does not exist",
+      });
     }
 
     // Verify if passwords match
@@ -65,9 +64,8 @@ const loginUser = async (req, res) => {
     return res.status(200).json({
       ok: true,
       user,
-      token
+      token,
     });
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -82,7 +80,7 @@ const renewToken = async (req, res) => {
 
   const token = await generateJWT(id, name);
 
-  res.json({ ok: true, token });
+  res.json({ ok: true, user: { _id: id, name }, token });
 };
 
 module.exports = { createUser, loginUser, renewToken };
