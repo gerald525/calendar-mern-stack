@@ -8,6 +8,8 @@ const types = {
 
   uiOpenModal: "[UI] Open modal",
   uiCloseModal: "[UI] Close modal",
+  uiSetError: "[UI] Set error",
+  uiRemoveError: "[UI] Remove error",
 
   eventSetActive: "[Event] Set active",
   eventClearActive: "[Event] Clear active",

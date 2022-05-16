@@ -1,14 +1,15 @@
 import { fetchNoToken, fetchWithToken } from "../helpers/fetch";
 import types from "../types";
 import Swal from "sweetalert2";
+import { setError } from "./ui";
 
 export const startLogin = (email, password) => {
   return async (dispatch) => {
     fetchNoToken("auth/login", { email, password }, "POST")
       .then((resp) => resp.json())
-      .then((resp) => {
-        if (resp.ok) {
-          const { user, token } = resp;
+      .then((data) => {
+        if (data.ok) {
+          const { user, token } = data;
           const { _id: id, name } = user;
 
           localStorage.setItem("token", token);
@@ -21,9 +22,8 @@ export const startLogin = (email, password) => {
             })
           );
         } else {
-          const msgError =
-            resp.msg || resp.errors[Object.keys(resp.errors)[0]].msg;
-          Swal.fire("Error", msgError, "error");
+          if (data.errors) dispatch(checkingErrors(data.errors));
+          if (data.msg) Swal.fire("Error", data.msg, "error");
         }
       })
       .catch((err) => {
@@ -37,9 +37,9 @@ export const startRegister = (name, email, password) => {
   return async (dispatch) => {
     fetchNoToken("auth/register", { name, email, password }, "POST")
       .then((resp) => resp.json())
-      .then((resp) => {
-        if (resp.ok) {
-          const { user, token } = resp;
+      .then((data) => {
+        if (data.ok) {
+          const { user, token } = data;
           const { _id: id, name } = user;
 
           localStorage.setItem("token", token);
@@ -52,9 +52,8 @@ export const startRegister = (name, email, password) => {
             })
           );
         } else {
-          const msgError =
-            resp.msg || resp.errors[Object.keys(resp.errors)[0]].msg;
-          Swal.fire("Error", msgError, "error");
+          if (data.errors) dispatch(checkingErrors(data.errors));
+          if (data.msg) Swal.fire("Error", data.msg, "error");
         }
       })
       .catch((err) => {
@@ -64,13 +63,20 @@ export const startRegister = (name, email, password) => {
   };
 };
 
+export const checkingErrors = (errors) => {
+  return (dispatch) => {
+    const { msg } = errors[Object.keys(errors)[0]];
+    dispatch(setError(msg));
+  };
+};
+
 export const startChecking = () => {
   return async (dispatch) => {
     fetchWithToken("auth/renew")
       .then((resp) => resp.json())
-      .then((resp) => {
-        if (resp.ok) {
-          const { user, token } = resp;
+      .then((data) => {
+        if (data.ok) {
+          const { user, token } = data;
           const { _id: id, name } = user;
 
           localStorage.setItem("token", token);

@@ -6,6 +6,7 @@ import CalendarScreen from "../components/calendar/CalendarScreen";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { startChecking } from "../actions/auth";
+import LoadingScreen from "../components/ui/LoadingScreen";
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const AppRouter = () => {
 
 
   if (checking){
-    return <>Wait...</>
+    return <LoadingScreen />
   }
 
   return (

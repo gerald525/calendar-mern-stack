@@ -187,7 +187,8 @@ template {
 :root {
   --color-primary: #f92562;
   --color-valid: #198754;
-  --color-invalid: #dc3545;
+  --color-danger-background: #fff0f0;
+  --color-danger-border: #f98a89;
   --color-white: #ffffff;
   --color-dark-gray: #373A3C;
   --color-light-gray: #ebebeb;

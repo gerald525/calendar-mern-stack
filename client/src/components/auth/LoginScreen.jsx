@@ -1,10 +1,14 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { startLogin } from "../../actions/auth";
+import validator from "validator";
 import useForm from "../../hooks/useForm";
+import { startLogin } from "../../actions/auth";
+import Alert from "../ui/Alert";
+import { removeError, setError } from "../../actions/ui";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
+  const { msgError } = useSelector((state) => state.ui);
   const [formValues, handleInputChange] = useForm({
     email: "juan@test.com",
     password: "Aabc123.",
@@ -13,8 +17,17 @@ const LoginScreen = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // TODO: Validations
-    dispatch(startLogin(email, password));
+    if (isFormValid()) dispatch(startLogin(email, password));
+  };
+
+  const isFormValid = () => {
+    console.log("Entering")
+    if (!validator.isEmail(email)) {
+      dispatch(setError("Email is not valid."));
+      return false;
+    }
+    dispatch(removeError());
+    return true;
   };
 
   return (
@@ -23,6 +36,7 @@ const LoginScreen = () => {
         <div className="card__body">
           <h1 className="card__title">Login</h1>
           <form className="form" onSubmit={handleLogin}>
+            {msgError && <Alert type="error" description={msgError} />}
             <div className="form__field">
               <label htmlFor="email" className="form__label">
                 Email

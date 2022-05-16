@@ -1,10 +1,14 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import validator from "validator";
 import { startRegister } from "../../actions/auth";
+import { removeError, setError } from "../../actions/ui";
 import useForm from "../../hooks/useForm";
+import Alert from "../ui/Alert";
 
 const RegisterScreen = () => {
   const dispatch = useDispatch();
+  const { msgError } = useSelector((state) => state.ui);
   const [formValues, handleInputChange] = useForm({
     name: "juan2",
     email: "juan2@test.com",
@@ -15,8 +19,28 @@ const RegisterScreen = () => {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    // TODO: Validations
-    dispatch(startRegister(name, email, password));
+    if (isFormValid()) dispatch(startRegister(name, email, password));
+  };
+
+  const isFormValid = () => {
+    if (name.trim().length === 0) {
+      dispatch(setError("Name is required."));
+      return false;
+    } else if (!validator.isEmail(email)) {
+      dispatch(setError("Email is not valid."));
+      return false;
+    } else if (
+      !validator.isStrongPassword(password.toString()) ||
+      password.length > 32
+    ) {
+      dispatch(setError("Password should be between 8-32 characters and should include 1 number, 1 symbol, 1 lowercase and 1 uppercase."));
+      return false;
+    } else if (password !== password2) {
+      dispatch(setError("Passwords should match."));
+      return false;
+    }
+    dispatch(removeError());
+    return true;
   };
 
   return (
@@ -25,6 +49,7 @@ const RegisterScreen = () => {
         <div className="card__body">
           <h1 className="card__title">Create account</h1>
           <form className="form" onSubmit={handleRegister}>
+            {msgError && <Alert type="error" description={msgError} />}
             <div className="form__field">
               <label htmlFor="name" className="form__label">
                 Name
