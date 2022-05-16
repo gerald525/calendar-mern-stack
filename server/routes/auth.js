@@ -5,6 +5,7 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
 const { createUser, loginUser, renewToken } = require("../controllers/auth");
+const { emailExists } = require("../helpers/databaseValidators");
 const validateFields = require("../middlewares/validateFields");
 const validateJWT = require("../middlewares/validateJwt");
 const router = Router();
@@ -13,6 +14,10 @@ router.post(
   "/register",
   [
     check("name", "Name is required").not().isEmpty(),
+    check("name", "Name must be between 1 to 32 characters.").isLength({
+      min: 1,
+      max: 32,
+    }),
     check("email", "Invalid email").isEmail(),
     check(
       "password",
@@ -22,6 +27,7 @@ router.post(
       max: 32,
     }),
     validateFields,
+    emailExists,
   ],
   createUser
 );

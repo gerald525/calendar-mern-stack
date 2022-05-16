@@ -35,7 +35,19 @@ const isEventOwner = async (req, res, next) => {
   next();
 };
 
+const emailExists = async (req, res, next) => {
+  const { email } = req.body;
+  const userExists = await Event.findOne({ email });
+  if (userExists) {
+    return res.status(400).json({
+      ok: false,
+      msg: "Email already exists",
+    });
+  }
+};
+
 module.exports = {
   eventExistsById,
   isEventOwner,
+  emailExists,
 };
