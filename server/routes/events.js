@@ -16,7 +16,7 @@ const {
 } = require("../helpers/databaseValidators");
 const { isDate, isDateAfter } = require("../helpers/dateValidators");
 const validateFields = require("../middlewares/validateFields");
-const validateJWT = require("../middlewares/validateJwt");
+const validateJWT = require("../middlewares/validateJWT");
 
 const router = Router();
 
