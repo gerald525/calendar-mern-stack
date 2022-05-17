@@ -59,7 +59,6 @@ export const eventStartAddNew = (event) => {
 
 export const eventStartUpdate = (event) => {
   return async (dispatch) => {
-    console.log(event);
     fetchWithToken(`events/${event.id}`, event, "PUT")
       .then((resp) => resp.json())
       .then((data) => {

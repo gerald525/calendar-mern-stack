@@ -22,9 +22,10 @@ const localizer = momentLocalizer(moment);
 
 const CalendarScreen = () => {
   const dispatch = useDispatch();
-  const { calendar, auth } = useSelector((state) => state);
+  const { calendar, auth, ui } = useSelector((state) => state);
   const { events, activeEvent } = calendar;
   const { id } = auth;
+  const { modalOpen } = ui;
   const [lastView, setLastView] = useState(
     localStorage.getItem("lastView") || "month"
   );
@@ -48,12 +49,22 @@ const CalendarScreen = () => {
 
   const onSelectSlot = (e) => {
     activeEvent && dispatch(eventClearActive());
+    if (e.action === "select" || e.action === "doubleClick") {
+      dispatch(
+        eventSetActive({
+          title: "",
+          notes: "",
+          start: e.start,
+          end: e.end,
+        })
+      );
+      dispatch(uiOpenModal());
+    }
   };
 
   const eventStyleGetter = (event, start, end, isSelected) => {
     const style = {
       backgroundColor: id === event.user._id ? "#367CF7" : "#465660",
-      borderRadius: "0px",
       opacity: 0.8,
       display: "block",
       color: "white",
@@ -62,7 +73,6 @@ const CalendarScreen = () => {
     return { style };
   };
 
-  // TODO: Select between slots in calendar screen to add event according to selected dates
   return (
     <div className="calendar">
       <Navbar />
@@ -82,7 +92,7 @@ const CalendarScreen = () => {
           components={{ event: CalendarEvent }}
         />
       </div>
-      {activeEvent && <DeleteBtn />}
+      {activeEvent && !modalOpen && <DeleteBtn />}
       <AddNewBtn />
       <CalendarModal />
     </div>

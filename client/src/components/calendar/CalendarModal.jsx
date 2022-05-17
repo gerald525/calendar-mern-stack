@@ -50,10 +50,7 @@ const CalendarModal = () => {
 
   const closeModal = () => {
     if (modalOpen) {
-      setTimeout(() => {
-        dispatch(eventClearActive());
-        setFormValues(initEvent);
-      }, 200);
+      dispatch(eventClearActive());
       dispatch(uiCloseModal());
     }
   };
@@ -77,7 +74,7 @@ const CalendarModal = () => {
 
     if (!isFormValid()) return;
 
-    if (activeEvent) {
+    if (activeEvent && activeEvent.id) {
       // Update
       dispatch(eventStartUpdate(formValues));
     } else {
@@ -111,7 +108,7 @@ const CalendarModal = () => {
       isOpen={modalOpen}
       onRequestClose={closeModal}
       closeTimeoutMS={200}
-      contentLabel="Example Modal"
+      contentLabel="Event modal"
       className="modal"
       overlayClassName="modal__background"
     >
