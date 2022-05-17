@@ -2,7 +2,6 @@ import Swal from "sweetalert2";
 import { fetchWithToken } from "../helpers/fetch";
 import { prepareEvents } from "../helpers/prepareEvents";
 import types from "../types";
-import { checkingErrors } from "./auth";
 
 export const eventStartLoading = () => {
   return async (dispatch) => {

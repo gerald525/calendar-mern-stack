@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { eventClearActive, eventSetActive } from "../../actions/event";
+import { eventClearActive } from "../../actions/event";
 import { uiOpenModal } from "../../actions/ui";
 import PlusIcon from "./icons/PlusIcon";
 
