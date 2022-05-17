@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 
@@ -10,7 +10,11 @@ import "./calendar.css";
 import CalendarModal from "./CalendarModal";
 import { useDispatch, useSelector } from "react-redux";
 import { uiOpenModal } from "../../actions/ui";
-import { eventClearActive, eventSetActive } from "../../actions/event";
+import {
+  eventClearActive,
+  eventSetActive,
+  eventStartLoading,
+} from "../../actions/event";
 import AddNewBtn from "../ui/AddNewBtn";
 import DeleteBtn from "../ui/DeleteBtn";
 
@@ -18,10 +22,16 @@ const localizer = momentLocalizer(moment);
 
 const CalendarScreen = () => {
   const dispatch = useDispatch();
-  const { events, activeEvent } = useSelector((state) => state.calendar);
+  const { calendar, auth } = useSelector((state) => state);
+  const { events, activeEvent } = calendar;
+  const { id } = auth;
   const [lastView, setLastView] = useState(
     localStorage.getItem("lastView") || "month"
   );
+
+  useEffect(() => {
+    dispatch(eventStartLoading());
+  }, [dispatch]);
 
   const onDoubleClick = (e) => {
     dispatch(uiOpenModal());
@@ -35,8 +45,21 @@ const CalendarScreen = () => {
     setLastView(e);
     localStorage.setItem("lastView", e);
   };
+
   const onSelectSlot = (e) => {
     activeEvent && dispatch(eventClearActive());
+  };
+
+  const eventStyleGetter = (event, start, end, isSelected) => {
+    const style = {
+      backgroundColor: id === event.user._id ? "#367CF7" : "#465660",
+      borderRadius: "0px",
+      opacity: 0.8,
+      display: "block",
+      color: "white",
+    };
+
+    return { style };
   };
 
   // TODO: Select between slots in calendar screen to add event according to selected dates
@@ -49,7 +72,7 @@ const CalendarScreen = () => {
           events={events}
           startAccessor="start"
           endAccessor="end"
-          // eventPropGetter={eventPropGetter}
+          eventPropGetter={eventStyleGetter}
           onDoubleClickEvent={onDoubleClick}
           onSelectEvent={onSelect}
           onView={onViewChange}

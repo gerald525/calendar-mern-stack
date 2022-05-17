@@ -1,9 +1,6 @@
 const types = {
   authCheckingFinish: "[Auth] Finish checking",
-  authStartLogin: "[Auth] Start login",
   authLogin: "[Auth] Login",
-  authStartRegister: "[Auth] Start register",
-  authRegister: "[Auth] Register",
   authLogout: "[Auth] Logout",
 
   uiOpenModal: "[UI] Open modal",
@@ -11,11 +8,14 @@ const types = {
   uiSetError: "[UI] Set error",
   uiRemoveError: "[UI] Remove error",
 
+  eventStartAddNew: "[Event] Start add new",
   eventSetActive: "[Event] Set active",
   eventClearActive: "[Event] Clear active",
+  eventClearLogout: "[Event] Clear logout",
   eventAddNew: "[Event] Add new",
   eventUpdate: "[Event] Update",
-  eventDelete: "[Event] Delete"
+  eventDelete: "[Event] Delete",
+  eventLoaded: "[Event] Events loaded"
 };
 
 export default types;

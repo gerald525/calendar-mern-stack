@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
-import validator from "validator";
 import { removeError, setError, uiCloseModal } from "../../actions/ui";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  eventAddNew,
   eventClearActive,
-  eventUpdate,
+  eventStartAddNew,
+  eventStartUpdate,
 } from "../../actions/event";
 import Alert from "../ui/Alert";
 
@@ -80,19 +79,10 @@ const CalendarModal = () => {
 
     if (activeEvent) {
       // Update
-      dispatch(eventUpdate(formValues));
+      dispatch(eventStartUpdate(formValues));
     } else {
       // Create new
-      dispatch(
-        eventAddNew({
-          ...formValues,
-          id: new Date().getTime(),
-          user: {
-            _id: "123",
-            name: "Juan",
-          },
-        })
-      );
+      dispatch(eventStartAddNew(formValues));
     }
 
     closeModal();
