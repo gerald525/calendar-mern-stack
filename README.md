@@ -107,4 +107,4 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 * [MongoDB](https://www.mongodb.com/) - NoSQL database
 
 ---
-⌨️ with ❤️ by [Juan Pablo Machado](https://github.com/Ju4npx ) 😊 
+⌨️ with ❤️ by [Gerald Lloyd](https://github.com/gerald525 ) 😊 
