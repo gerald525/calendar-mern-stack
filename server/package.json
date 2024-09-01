@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "keywords": [],
-  "author": "Juan Pablo Machado",
+  "author": "gerald525",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
